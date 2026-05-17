@@ -1,18 +1,18 @@
 > CRIANDO PELA PRIMEIRA VEZ:
 
-git init
-git add .
-git commit -m "Initial commit - Laravel"
+- git init (inicializar repositório - com 'git instalado')
+- git add . (selecionar todas as pastas)
+- git commit -m "Initial commit - Laravel" (descrever)
+= git remote add origin <URL> (linkando com o github pela url)
+- git branch -M main (renomeando branch 'master' para 'main')
+- git push -u origin main (salvando alterações no github)
 
-git remote add origin <URL>
-git branch -M main
-git push -u origin main
-
+[Esses comandos devem ser colocados no 'terminal' - depois de acessado seu 'projeto']
 
 
 > CLONANDO E CONFIGURANDO PROJETO:
 
-1. git clone ...
+1. git clone <url>
 2. composer install
 3. cp .env.example .env
 4. php artisan key:generate
@@ -27,13 +27,15 @@ git push -u origin main
 > ATUALIZANDO ALTERAÇÕES:
 
 1- git status (verificar alterações atuais)
-2- git add . (todas as pastas) ou git add database/migrations (caminho específico)
+2- git add . (todas as pastas) ou git add database/migrations (caminho ou arquivo específico)
 3- git commit -m "Criando Estrutura Inicial do Banco de Dados"
 4- git checkout -b feature/database_structure (criando branch 'feature/...')
 4- git push origin feature/database-structure (add arquivos para nova branch)
 5- depois, no github, revisar e dar 'merge' na main
 
+[Use 'git pull' - para baixar quaisquer arquivos que estão no 'github', mas não estão no seu projeto. Caso contrário, o 'commit' não será aceito]
 
+>
 
 ### 📌 Desenvolvimento de Funcionalidades
 
