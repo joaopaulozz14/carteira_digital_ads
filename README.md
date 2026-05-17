@@ -26,16 +26,16 @@
 
 > ATUALIZANDO ALTERAÇÕES:
 
-1- git status (verificar alterações atuais)
-2- git add . (todas as pastas) ou git add database/migrations (caminho ou arquivo específico)
-3- git commit -m "Criando Estrutura Inicial do Banco de Dados"
-4- git checkout -b feature/database_structure (criando branch 'feature/...')
-4- git push origin feature/database-structure (add arquivos para nova branch)
-5- depois, no github, revisar e dar 'merge' na main
+1. git status (verificar alterações atuais)
+2. git add . (todas as pastas) ou git add database/migrations (caminho ou arquivo específico)
+3. git commit -m "Criando Estrutura Inicial do Banco de Dados"
+4. git checkout -b feature/database_structure (criando branch 'feature/...')
+4. git push origin feature/database-structure (add arquivos para nova branch)
+5. depois, no github, revisar e dar 'merge' na main
 
-[Use 'git pull' - para baixar quaisquer arquivos que estão no 'github', mas não estão no seu projeto. Caso contrário, o 'commit' não será aceito]
+> OBS:
+Use 'git pull' - irá baixar os arquivos que estão no 'github', mas que não estão no seu projeto local. Se não fizer isso, o 'commit' será rejeitado. EX: O 'README' é alterado no 'github' -> você deve baixar a última versão desse arquivo no seu projeto local. O mesmo vale para qualquer arquivo inconsistente entre o 'projeto github' e o seu 'projeto local'.
 
->
 
 ### 📌 Desenvolvimento de Funcionalidades
 
