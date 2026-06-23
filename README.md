@@ -1,28 +1,36 @@
-> CRIANDO PELA PRIMEIRA VEZ:
-
-- git init (inicializar repositório - com 'git instalado')
-- git add . (selecionar todas as pastas)
-- git commit -m "Initial commit - Laravel" (descrever)
-= git remote add origin <URL> (linkando com o github pela url)
-- git branch -M main (renomeando branch 'master' para 'main')
-- git push -u origin main (salvando alterações no github)
-
-[Esses comandos devem ser colocados no 'terminal' - depois de acessado seu 'projeto']
-
-
 > CLONANDO E CONFIGURANDO PROJETO:
 
 1. git clone <url>
 2. composer install
-3. cp .env.example .env
-4. php artisan key:generate
-5. configurar banco (.ENV)
-6. php artisan migrate
-7. php artisan serve
+3. npm install;
+4. cp .env.example .env
+5. php artisan key:generate
+6. configurar banco (.ENV)
+7. php artisan migrate
+8. php artisan serve (rodar backend)
+9. npm run dev (rodar frontend)
 
-	[REACT/INERTIA ainda não foi utilizado/importado]
+ OBS: git remote set-url origin <novo_endereço_do_repositório> (caso necessário - mudar o repositório local e apontá-lo para outro link do github)
 
+---
 
+> OUTROS PACOTES INSTALADOS:
+
+	- Breeze:
+		composer require laravel/breeze --dev
+
+	- REACT/INERTIA:
+		php artisan breeze:install react (Breeze already installs 'Inertia' -> you can use it to generate 'REACT' or 'VUE' files for auth);
+
+	- Atualizações ou Instalação:
+		NPM INSTALL/UPDATE | COMPOSER UPDATE/INSTALL | NPM AUDIT FIX (corrigir vulnerabilidades)
+
+	- Rodando:
+		NPM RUN DEV (Rodar frontend) | PHP ARTISAN SERVE (Rodar backend)
+
+> OBS: Não é necessário instalar o 'Breeze' ou 'REACT/INERTIA' novamente - ele não altera a 'Vendor', somente gera arquivos diretamente na aplicação.
+
+---
 
 > ATUALIZANDO ALTERAÇÕES:
 
@@ -36,6 +44,7 @@
 > OBS:
 Use 'git pull' - irá baixar os arquivos que estão no 'github', mas que não estão no seu projeto local. Se não fizer isso, o 'commit' será rejeitado. EX: O 'README' é alterado no 'github' -> você deve baixar a última versão desse arquivo no seu projeto local. O mesmo vale para qualquer arquivo inconsistente entre o 'projeto github' e o seu 'projeto local'.
 
+---
 
 ### 📌 Desenvolvimento de Funcionalidades
 
@@ -53,6 +62,18 @@ feature/upload-certificados
 ---
 
 ## 🔄 Fluxo de Trabalho
+
+### 0. Criando repositório pela primeira vez:
+
+- git init (inicializar repositório - com 'git instalado')
+- git add . (selecionar todas as pastas)
+- git commit -m "Initial commit - Laravel" (descrever)
+= git remote add origin <URL> (linkando com o github pela url)
+- git branch -M main (renomeando branch 'master' para 'main')
+- git push -u origin main (salvando alterações no github)
+
+[Esses comandos devem ser colocados no 'terminal' - depois de acessado seu 'projeto']
+
 
 ### 1. Atualizar projeto local
 
@@ -157,6 +178,7 @@ Após finalizar a funcionalidade:
 
 ---
 
+---
 
 
 # 📚 Carteira Digital de Certificados (CDC)
@@ -280,7 +302,7 @@ Destaque:
 
 * PHP 12
 * Composer
-* Node.js (REACT)
+* NPM (REACT)
 * MySQL
 
 ---
@@ -317,40 +339,11 @@ php artisan serve
 
 ## 👥 Equipe
 
-* Backend (1)
-* Frontend (1)
-* Testador
+* Backend
+* Frontend
 * Gerente de Projeto
 
----
 
-## 📌 Próximas Etapas
-
-* Upload de certificados
-* Listagem e status
-* Validação por administrador
-* Cálculo automático de horas
-* Dashboard
-
----
-
-
-## 🌿 Fluxo de Trabalho com Branches
-
-O projeto utiliza uma estratégia simples de versionamento baseada em branches para evitar conflitos e organizar o desenvolvimento em equipe.
-
----
-
-
-### 📌 Branch Principal
-
-```text
-main
-```
-
-A branch `main` deve conter apenas versões estáveis e funcionais do sistema.
-
----
 
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
