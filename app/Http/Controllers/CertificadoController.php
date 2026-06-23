@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Certificado;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CertificadoController extends Controller
 {
@@ -12,7 +13,9 @@ class CertificadoController extends Controller
      */
     public function index()
     {
-        //
+        $certificados = Certificado::where('user_id', Auth::id())->get();
+
+        return view('certificados.index', compact('certificados'));
     }
 
     /**
@@ -21,6 +24,7 @@ class CertificadoController extends Controller
     public function create()
     {
         //
+        return view('certificados.create');
     }
 
     /**
@@ -28,7 +32,35 @@ class CertificadoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // campos: user_id, categoria_id, titulo, horas_declaradas, horas_validadas, status, justificativa, arquivo_path, data_envio
+
+        $request->validate([
+            'categoria_id' => 'required|exists:categorias,id',
+            'titulo' => 'required|string|max:255',
+            'horas_declaradas' => 'required|integer|min:1',
+            'arquivo_path' => 'required|file|mimes:pdf|max:2048', // max 2MB
+        ]);
+
+        $arquivoPath = $request->file('arquivo_path')->store('certificados', 'public');
+
+        $certificado = new Certificado();
+
+        $certificado->user_id = Auth::id();
+        $certificado->categoria_id = $request->categoria_id;
+        $certificado->titulo = $request->titulo;
+        $certificado->horas_declaradas = $request->horas_declaradas;
+
+        $certificado->status = 'PENDENTE';
+        $certificado->data_envio = now();
+
+        $certificado->horas_validadas = null;
+        $certificado->justificativa = null;
+
+        $certificado->arquivo_path = $arquivoPath;
+
+        $certificado->save();
+
+        return redirect()->route('certificados.index')->with('success', 'Certificado enviado com sucesso!');
     }
 
     /**
