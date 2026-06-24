@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Certificado;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class CertificadoController extends Controller
 {
@@ -15,7 +16,9 @@ class CertificadoController extends Controller
     {
         $certificados = Certificado::where('user_id', Auth::id())->get();
 
-        return view('certificados.index', compact('certificados'));
+        return Inertia::render('Certificados/Index', [
+            'certificados' => $certificados
+        ]);
     }
 
     /**
@@ -24,7 +27,7 @@ class CertificadoController extends Controller
     public function create()
     {
         //
-        return view('certificados.create');
+        return Inertia::render('Certificados/Create');
     }
 
     /**
@@ -60,7 +63,7 @@ class CertificadoController extends Controller
 
         $certificado->save();
 
-        return redirect()->route('certificados.index')->with('success', 'Certificado enviado com sucesso!');
+        
     }
 
     /**
