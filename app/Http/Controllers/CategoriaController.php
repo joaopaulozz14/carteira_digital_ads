@@ -22,11 +22,7 @@ class CategoriaController extends Controller
     public function create()
     {
         //
-        $categorias = Categoria::all();
 
-        return Inertia::render('Certificados/Create', [
-            'categorias' => $categorias
-        ]);
     }
 
     /**

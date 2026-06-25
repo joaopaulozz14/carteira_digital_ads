@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Certificado;
+use App\Models\Categoria;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -27,7 +28,11 @@ class CertificadoController extends Controller
     public function create()
     {
         //
-        return Inertia::render('Certificados/Create');
+        $categorias = Categoria::all();
+
+        return Inertia::render('Certificados/Create', [
+            'categorias' => $categorias
+        ]);
     }
 
     /**

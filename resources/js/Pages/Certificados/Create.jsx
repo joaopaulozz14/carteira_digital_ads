@@ -1,9 +1,8 @@
 import React from 'react';
-import { Link } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 
-export default function Create() {
+export default function Create({ categorias }) {
 
     return (
 
@@ -24,9 +23,17 @@ export default function Create() {
                         encType="multipart/form-data"
                     >
                         <select name="categoria_id">
-                            <option value="">Selecione uma categoria</option>
-                            <option value="1">Categoria 1</option>
-                            <option value="2">Categoria 2</option>
+                            <option value="">
+                                Selecione uma categoria
+                            </option>
+                            {categorias.map(categoria => (
+                                <option
+                                    key={categoria.id}
+                                    value={categoria.id}
+                                >
+                                    {categoria.nome}
+                                </option>
+                            ))}
                         </select>
 
                         <input
