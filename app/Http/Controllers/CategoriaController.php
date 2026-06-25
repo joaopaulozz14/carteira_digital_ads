@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Categoria;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class CategoriaController extends Controller
 {
@@ -21,6 +22,11 @@ class CategoriaController extends Controller
     public function create()
     {
         //
+        $categorias = Categoria::all();
+
+        return Inertia::render('Certificados/Create', [
+            'categorias' => $categorias
+        ]);
     }
 
     /**
