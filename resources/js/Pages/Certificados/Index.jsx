@@ -18,6 +18,7 @@ export default function Index({ certificados }) {
                 {certificados.map((certificado) => (
                     <div key={certificado.id}>
                         {certificado.titulo}
+                        {certificado.status}
                     </div>
                 ))}
             </div>
