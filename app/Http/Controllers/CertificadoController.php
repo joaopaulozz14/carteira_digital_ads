@@ -15,11 +15,23 @@ class CertificadoController extends Controller
      */
     public function index()
     {
-        $certificados = Certificado::where('user_id', Auth::id())->get();
+        if (Auth::user()->tipo === 'ADMIN') {
 
-        return Inertia::render('Certificados/Index', [
-            'certificados' => $certificados
-        ]);
+            $certificados = Certificado::with([
+                'user',
+                'categoria'
+            ])->get();
+        } else {
+
+            $certificados = Certificado::with('categoria')
+                ->where('user_id', Auth::id())
+                ->get();
+        }
+
+        return Inertia::render(
+            'Certificados/Index',
+            compact('certificados')
+        );
     }
 
     /**
@@ -67,8 +79,6 @@ class CertificadoController extends Controller
         $certificado->arquivo_path = $arquivoPath;
 
         $certificado->save();
-
-        
     }
 
     /**
