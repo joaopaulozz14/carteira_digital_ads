@@ -112,4 +112,20 @@ class CertificadoController extends Controller
     {
         //
     }
+
+    public function aprovar(Certificado $certificado)
+    {
+        $certificado->status = 'APROVADO';
+        $certificado->save();
+
+        return back();
+    }
+
+    public function rejeitar(Certificado $certificado)
+    {
+        $certificado->status = 'REJEITADO';
+        $certificado->save();
+
+        return back();
+    }
 }
