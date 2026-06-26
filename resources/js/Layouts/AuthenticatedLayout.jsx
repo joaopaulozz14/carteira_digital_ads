@@ -32,19 +32,32 @@ export default function AuthenticatedLayout({ header, children }) {
                                     Dashboard
                                 </NavLink>
 
-                                <NavLink
-                                    href={route('certificados.index')}
-                                    active={route().current('certificados.index')}
-                                >
-                                    Certificados
-                                </NavLink>
+                                {user.tipo === 'ESTUDANTE' && (
+                                    <NavLink
+                                        href={route('certificados.index')}
+                                        active={route().current('certificados.index')}
+                                    >
+                                        Certificados
+                                    </NavLink>
+                                )}
 
-                                <NavLink
-                                    href={route('certificados.create')}
-                                    active={route().current('certificados.create')}
-                                >
-                                    Novo Certificado
-                                </NavLink>
+                                {user.tipo === 'ADMIN' && (
+                                    <NavLink
+                                        href={route('certificados.index')}
+                                        active={route().current('certificados.index')}
+                                    >
+                                        Gerenciar Certificados
+                                    </NavLink>
+                                )}
+
+                                {user.tipo === 'ESTUDANTE' && (
+                                    <NavLink
+                                        href={route('certificados.create')}
+                                        active={route().current('certificados.create')}
+                                    >
+                                        Novo Certificado
+                                    </NavLink>
+                                )}
 
                             </div>
 
