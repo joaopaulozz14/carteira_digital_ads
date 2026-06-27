@@ -18,29 +18,57 @@ export default function Index({ certificados }) {
 
             <div className="p-6">
                 <h1 className="text-2xl font-bold mb-4">Lista de Certificados</h1>
-                
+
                 <table className="min-w-full table-auto border-collapse">
                     <thead>
-                        <tr className="border-b">
-                            {/* Só mostra a coluna "Aluno" se for ADMIN */}
+                        <tr>
+
                             {auth.user.tipo === 'ADMIN' && (
-                                <th className="text-left p-2">Aluno</th>
+                                <th>Aluno</th>
                             )}
-                            <th className="text-left p-2">Título</th>
-                            <th className="text-left p-2">Status</th>
+
+                            <th>Título</th>
+
+                            <th>Status</th>
+
+                            {auth.user.tipo === 'ADMIN' && (
+                                <th>Ações</th>
+                            )}
+
                         </tr>
                     </thead>
                     <tbody>
-                        {certificados.map((certificado) => (
-                            <tr key={certificado.id} className="border-b">
-                                {/* Só mostra o nome do aluno se for ADMIN */}
+
+                        {certificados.map(certificado => (
+
+                            <tr key={certificado.id}>
+
                                 {auth.user.tipo === 'ADMIN' && (
-                                    <td className="p-2">{certificado.user?.name || 'N/A'}</td>
+                                    <td>{certificado.user?.name}</td>
                                 )}
-                                <td className="p-2">{certificado.titulo}</td>
-                                <td className="p-2">{certificado.status}</td>
+
+                                <td>{certificado.titulo}</td>
+
+                                <td>{certificado.status}</td>
+
+                                {auth.user.tipo === 'ADMIN' && (
+                                    <td>
+
+                                        <button>
+                                            Aprovar
+                                        </button>
+
+                                        <button>
+                                            Rejeitar
+                                        </button>
+
+                                    </td>
+                                )}
+
                             </tr>
+
                         ))}
+
                     </tbody>
                 </table>
             </div>

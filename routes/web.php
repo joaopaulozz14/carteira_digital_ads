@@ -28,7 +28,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
     Route::resource('certificados', CertificadoController::class);
+    Route::patch('/certificados/{certificado}/aprovar',[CertificadoController::class, 'aprovar'])->name('certificados.aprovar');
+    Route::patch('/certificados/{certificado}/rejeitar',[CertificadoController::class, 'rejeitar'])->name('certificados.rejeitar');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
