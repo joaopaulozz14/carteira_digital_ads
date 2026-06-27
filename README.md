@@ -159,10 +159,10 @@ npm run dev
 
 ```
 Email:
-admin@ifms.edu.br
+admin@cdc.com
 
 Senha:
-12345678
+password
 ```
 
 ---
@@ -171,10 +171,11 @@ Senha:
 
 ```
 Email:
-aluno@ifms.edu.br
+aluno1@cdc.com
+aluno2@cdc.com
 
 Senha:
-12345678
+password
 ```
 
 ---
@@ -245,8 +246,7 @@ routes/
 - Regras específicas por instituição
 - Sistema de notificações
 - Pesquisa e filtros
-- Integração com gov.br
-
+  
 ---
 
 # Fluxo da Aplicação
@@ -274,12 +274,3 @@ Aprovar/Rejeitar
 
 Status Atualizado
 ```
-
----
-
-# Equipe
-
-- Luis Konstanky B.
-- Gabriel Baracat
-- João Paulo Machado
-- ...
