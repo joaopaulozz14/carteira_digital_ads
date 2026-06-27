@@ -8,6 +8,9 @@ import { useState } from 'react';
 export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
 
+    const isAdmin = user.tipo === 'ADMIN';
+    const isAluno = user.tipo === 'ESTUDANTE';
+
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
@@ -27,30 +30,24 @@ export default function AuthenticatedLayout({ header, children }) {
 
                                 <NavLink
                                     href={route('dashboard')}
-                                    active={route().current('dashboard')}
+                                    active={route().current('dashboard*')}
+
                                 >
                                     Dashboard
                                 </NavLink>
 
-                                {user.tipo === 'ESTUDANTE' && (
+                                {/* Link principal de Certificados (Visível para ambos) */}
+                                {(isAluno || isAdmin) && (
                                     <NavLink
                                         href={route('certificados.index')}
                                         active={route().current('certificados.index')}
                                     >
-                                        Certificados
+                                        {isAdmin ? 'Gerenciar Certificados' : 'Certificados'}
                                     </NavLink>
                                 )}
 
-                                {user.tipo === 'ADMIN' && (
-                                    <NavLink
-                                        href={route('certificados.index')}
-                                        active={route().current('certificados.index')}
-                                    >
-                                        Gerenciar Certificados
-                                    </NavLink>
-                                )}
-
-                                {user.tipo === 'ESTUDANTE' && (
+                                {/* Link de criação (Exclusivo do Estudante) */}
+                                {isAluno && (
                                     <NavLink
                                         href={route('certificados.create')}
                                         active={route().current('certificados.create')}
@@ -58,6 +55,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                         Novo Certificado
                                     </NavLink>
                                 )}
+
 
                             </div>
 
@@ -72,12 +70,16 @@ export default function AuthenticatedLayout({ header, children }) {
                                                 type="button"
                                                 className="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
                                             >
-                                                <div className="ms-2">
-                                                    {user.name}
-                                                </div>
+                                                <div>
+                                                    <div className="ms-2">
+                                                        {user.name}
+                                                    </div>
 
-                                                <div className="text-sm text-gray-500">
-                                                    {user.tipo}
+                                                    <div className="text-xs text-gray-400">
+                                                        {user.tipo === 'ADMIN'
+                                                            ? 'Administrador'
+                                                            : 'Estudante'}
+                                                    </div>
                                                 </div>
 
                                                 <svg
@@ -168,24 +170,31 @@ export default function AuthenticatedLayout({ header, children }) {
 
                         <ResponsiveNavLink
                             href={route('dashboard')}
-                            active={route().current('dashboard')}
+                            active={route().current('dashboard*')}
                         >
                             Dashboard
                         </ResponsiveNavLink>
 
-                        <ResponsiveNavLink
-                            href={route('certificados.index')}
-                            active={route().current('certificados.index')}
-                        >
-                            Certificados
-                        </ResponsiveNavLink>
+                        {/* Link responsivo de Certificados (Visível para ambos) */}
+                        {(isAluno || isAdmin) && (
+                            <ResponsiveNavLink
+                                href={route('certificados.index')}
+                                active={route().current('certificados.index')}
+                            >
+                                {isAdmin ? 'Gerenciar Certificados' : 'Certificados'}
+                            </ResponsiveNavLink>
+                        )}
 
-                        <ResponsiveNavLink
-                            href={route('certificados.create')}
-                            active={route().current('certificados.create')}
-                        >
-                            Novo Certificado
-                        </ResponsiveNavLink>
+                        {/* Link responsivo de criação (Exclusivo do Estudante) */}
+                        {isAluno && (
+                            <ResponsiveNavLink
+                                href={route('certificados.create')}
+                                active={route().current('certificados.create')}
+                            >
+                                Novo Certificado
+                            </ResponsiveNavLink>
+                        )}
+
 
                     </div>
 
