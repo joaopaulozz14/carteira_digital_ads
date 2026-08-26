@@ -71,6 +71,7 @@ Esses recursos poderão ser considerados em versões futuras.
 - GitHub
 
 ---
+---
 
 # Requisitos para Execução
 
@@ -94,6 +95,8 @@ composer --version
 
 ---
 
+---
+
 # Funcionalidades da Versão Beta
 
 ## Estudante
@@ -110,6 +113,8 @@ composer --version
 - Visualização de todos os certificados
 - Aprovação de certificados
 - Rejeição de certificados
+
+---
 
 ---
 
