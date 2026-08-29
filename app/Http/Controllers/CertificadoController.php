@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use App\Http\Requests\StoreCertificadoRequest;
+use App\Http\Requests\UpdateCertificadoRequest;
+
 
 class CertificadoController extends Controller
 {
@@ -40,7 +42,6 @@ class CertificadoController extends Controller
      */
     public function create()
     {
-        //
         $categorias = Categoria::all();
 
         return Inertia::render('Certificados/Create', [
@@ -77,7 +78,11 @@ class CertificadoController extends Controller
      */
     public function show(Certificado $certificado)
     {
-        //
+        $this->authorizeView($certificado);
+
+        return Inertia::render('Certificados/Show', [
+            'certificado' => $certificado->load('categoria', 'user'),
+        ]);
     }
 
     /**
@@ -85,9 +90,19 @@ class CertificadoController extends Controller
      */
     public function edit(Certificado $certificado)
     {
-        //
-    }
+        $this->authorizeView($certificado);
 
+        if ($certificado->status !== 'PENDENTE' && Auth::user()->tipo !== 'ADMIN') {
+            return redirect()
+                ->route('certificados.show', $certificado)
+                ->with('error', 'Este certificado já foi analisado e não pode mais ser editado.');
+        }
+
+        return Inertia::render('Certificados/Edit', [
+            'certificado' => $certificado->load('categoria'),
+            'categorias' => Categoria::all(),
+        ]);
+    }
     /**
      * Update the specified resource in storage.
      */
@@ -118,5 +133,12 @@ class CertificadoController extends Controller
         $certificado->save();
 
         return back();
+    }
+
+    private function authorizeView(Certificado $certificado): void
+    {
+        if ($certificado->user_id !== Auth::id() && Auth::user()->tipo !== 'ADMIN') {
+            abort(403);
+        }
     }
 }
