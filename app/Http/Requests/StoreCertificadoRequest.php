@@ -12,7 +12,7 @@ class StoreCertificadoRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true; // Allow all users to make this request. Adjust as needed for your application.
     }
 
     /**
@@ -27,6 +27,16 @@ class StoreCertificadoRequest extends FormRequest
             'titulo' => 'required|string|max:255',
             'horas_declaradas' => 'required|integer|min:1',
             'arquivo_path' => 'required|file|mimes:pdf|max:2048',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'arquivo_path.required' => 'Anexe o certificado em PDF.',
+            'arquivo_path.mimes' => 'O certificado deve estar em formato PDF.',
+            'arquivo_path.max' => 'O arquivo deve ter no máximo 2MB.',
+            'horas_declaradas.min' => 'A carga horária deve ser de pelo menos 1 hora.',
         ];
     }
 }
