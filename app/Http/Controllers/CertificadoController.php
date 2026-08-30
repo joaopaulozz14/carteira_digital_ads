@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use App\Http\Requests\StoreCertificadoRequest;
 use App\Http\Requests\UpdateCertificadoRequest;
+use Illuminate\Support\Facades\Storage;
 
 
 class CertificadoController extends Controller
@@ -18,6 +19,7 @@ class CertificadoController extends Controller
      */
     public function index()
     {
+        // For now, there's still not a separation between institutions, so we will show all certificates to admins and only the user's own certificates to students.
         if (Auth::user()->tipo === 'ADMIN') {
 
             $certificados = Certificado::with([
@@ -106,9 +108,20 @@ class CertificadoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Certificado $certificado)
+    public function update(UpdateCertificadoRequest $request, Certificado $certificado)
     {
-        //
+        $dados = $request->only(['categoria_id', 'titulo', 'horas_declaradas']);
+
+        if ($request->hasFile('arquivo_path')) {
+            Storage::disk('public')->delete($certificado->arquivo_path);
+            $dados['arquivo_path'] = $request->file('arquivo_path')->store('certificados', 'public');
+        }
+
+        $certificado->update($dados);
+
+        return redirect()
+            ->route('certificados.show', $certificado)
+            ->with('success', 'Certificado atualizado com sucesso.');
     }
 
     /**
@@ -116,7 +129,14 @@ class CertificadoController extends Controller
      */
     public function destroy(Certificado $certificado)
     {
-        //
+        $this->authorizeView($certificado);
+
+        Storage::disk('public')->delete($certificado->arquivo_path);
+        $certificado->delete();
+
+        return redirect()
+            ->route('certificados.index')
+            ->with('success', 'Certificado excluído com sucesso.');
     }
 
     public function aprovar(Certificado $certificado)
