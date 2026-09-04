@@ -38,6 +38,8 @@ class UpdateCertificadoRequest extends FormRequest
         return [
             'categoria_id' => 'required|exists:categorias,id',
             'titulo' => 'required|string|max:255',
+            'data_atividade' => 'required|date|before_or_equal:today',
+            'periodo' => ['required', 'string', 'regex:/^\d{4}\.[1-2]$/'], // Formato: "2026.1"
             'horas_declaradas' => 'required|integer|min:1',
             'arquivo_path' => 'nullable|file|mimes:pdf|max:2048', // Optional file upload for updates
         ];

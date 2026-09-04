@@ -40,7 +40,7 @@ class StoreCertificadoRequest extends FormRequest
             'arquivo_path.required' => 'Anexe o certificado em PDF.',
             'arquivo_path.mimes' => 'O certificado deve estar em formato PDF.',
             'arquivo_path.max' => 'O arquivo deve ter no máximo 2MB.',
-            'horas_declaradas.min' => 'A carga horária deve ser de pelo menos 1 hora.',
+            'horas_declaradas.min' => 'A carga horária deve ser de pelo menos 1 hora',
         ];
     }
 }
