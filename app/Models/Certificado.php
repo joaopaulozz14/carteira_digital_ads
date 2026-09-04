@@ -10,12 +10,18 @@ class Certificado extends Model
         'user_id',
         'categoria_id',
         'titulo',
+        'data_atividade',
+        'periodo',
         'horas_declaradas',
         'horas_validadas',
         'status',
         'justificativa',
         'arquivo_path',
         'data_envio'
+    ];
+    protected $casts = [
+    'data_atividade' => 'date',
+    'data_envio' => 'datetime',
     ];
 
     public function user()

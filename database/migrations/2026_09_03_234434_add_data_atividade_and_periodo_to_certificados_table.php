@@ -10,8 +10,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('certificados', function (Blueprint $table) {
-            $table->date('data_atividade')->after('titulo');
-            $table->string('periodo', 10)->after('data_atividade'); // formato: "2026.1"
+            $table->date('data_atividade')->nullable()->after('titulo'); //nullable temporario para não quebrar a migration, depois será removido (ajustar factory e seeders e rodar o comando php artisan migrate:fresh --seed)
+            $table->string('periodo', 10)->nullable()->after('data_atividade'); // formato: "2026.1"
         });
     }
 
