@@ -10,6 +10,8 @@ export default function Edit({ certificado, categorias }) {
     const { data, setData, post, processing, errors } = useForm({
         categoria_id: certificado.categoria_id,
         titulo: certificado.titulo,
+        data_atividade: certificado.data_atividade,
+        periodo: certificado.periodo,
         horas_declaradas: certificado.horas_declaradas,
         arquivo_path: null,
         _method: 'put',
@@ -62,9 +64,36 @@ export default function Edit({ certificado, categorias }) {
                             />
                             <InputError message={errors.titulo} className="mt-2" />
                         </div>
+                        
+                        <div>
+                            <InputLabel htmlFor="data_atividade" value="Data da Atividade" />
+                            <TextInput
+                                id="data_atividade"
+                                type="date"
+                                name="data_atividade"
+                                value={data.data_atividade}
+                                max={new Date().toISOString().split('T')[0]}
+                                className="mt-1 block w-full"
+                                onChange={(e) => setData('data_atividade', e.target.value)}
+                            />
+                            <InputError message={errors.data_atividade} className="mt-2" />
+                        </div>
 
                         <div>
-                            <InputLabel htmlFor="horas_declaradas" value="Horas Declaradas" />
+                            <InputLabel htmlFor="periodo" value="Período" />
+                            <TextInput
+                                id="periodo"
+                                name="periodo"
+                                placeholder="ex: 2026.1"
+                                value={data.periodo}
+                                className="mt-1 block w-full"
+                                onChange={(e) => setData('periodo', e.target.value)}
+                            />
+                            <InputError message={errors.periodo} className="mt-2" />
+                        </div>
+
+                        <div>
+                            <InputLabel htmlFor="horas_declaradas" value="Pontuação Declarada" />
                             <TextInput
                                 id="horas_declaradas"
                                 type="number"
