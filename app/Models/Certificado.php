@@ -10,7 +10,8 @@ class Certificado extends Model
         'user_id',
         'categoria_id',
         'titulo',
-        'data_atividade',
+        'data_ingresso',
+        'data_conclusao',
         'periodo',
         'horas_declaradas',
         'horas_validadas',
@@ -20,7 +21,8 @@ class Certificado extends Model
         'data_envio'
     ];
     protected $casts = [
-    'data_atividade' => 'date',
+    'data_ingresso' => 'date',  
+    'data_conclusao' => 'date',
     'data_envio' => 'datetime',
     ];
 
