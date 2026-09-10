@@ -56,9 +56,15 @@ export default function Show({ certificado }) {
                             <dd className="mt-1 text-sm text-gray-900">{certificado.periodo}</dd>
                         </div>
                         <div>
-                            <dt className="text-sm font-medium text-gray-500">Data da Atividade</dt>
+                            <dt className="text-sm font-medium text-gray-500">Data de Ingresso</dt>
                             <dd className="mt-1 text-sm text-gray-900">
-                                {new Date(certificado.data_atividade).toLocaleDateString('pt-BR')}
+                                {new Date(certificado.data_ingresso).toLocaleDateString('pt-BR')}
+                            </dd>
+                        </div>
+                        <div>
+                            <dt className="text-sm font-medium text-gray-500">Data de Conclusão</dt>
+                            <dd className="mt-1 text-sm text-gray-900">
+                                {new Date(certificado.data_conclusao).toLocaleDateString('pt-BR')}
                             </dd>
                         </div>
                         <div>

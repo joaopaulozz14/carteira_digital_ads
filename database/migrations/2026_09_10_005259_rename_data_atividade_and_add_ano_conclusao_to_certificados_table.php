@@ -13,7 +13,7 @@ return new class extends Migration
         });
 
         Schema::table('certificados', function (Blueprint $table) {
-            $table->year('data_conclusao')->after('data_ingresso');
+            $table->date('data_conclusao')->after('data_ingresso');
         });
     }
 

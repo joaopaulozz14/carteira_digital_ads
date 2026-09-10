@@ -6,7 +6,8 @@ export default function Create({ categorias }) {
     const { data, setData, post, processing, errors, reset } = useForm({
         categoria_id: '',
         titulo: '',
-        data_atividade: '',
+        data_ingresso: '',
+        data_conclusao: '',
         periodo: '',
         horas_declaradas: '',
         arquivo_path: null,
@@ -65,17 +66,28 @@ export default function Create({ categorias }) {
                             {errors.titulo && <p className="text-red-500 text-sm mt-1">{errors.titulo}</p>}
                         </div>
 
-                        {/* Campo Data da Atividade */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700">Data da Atividade</label>
+                            <label className="block text-sm font-medium text-gray-700">Data de Ingresso</label>
                             <input
                                 type="date"
-                                value={data.data_atividade}
+                                value={data.data_ingresso}
                                 max={new Date().toISOString().split('T')[0]}
-                                onChange={e => setData('data_atividade', e.target.value)}
+                                onChange={e => setData('data_ingresso', e.target.value)}
                                 className="mt-1 block w-full rounded border-gray-300 shadow-sm"
                             />
-                            {errors.data_atividade && <p className="text-red-500 text-sm mt-1">{errors.data_atividade}</p>}
+                            {errors.data_ingresso && <p className="text-red-500 text-sm mt-1">{errors.data_ingresso}</p>}
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700">Data de Conclusão</label>
+                            <input
+                                type="date"
+                                value={data.data_conclusao}
+                                max={new Date().toISOString().split('T')[0]}
+                                onChange={e => setData('data_conclusao', e.target.value)}
+                                className="mt-1 block w-full rounded border-gray-300 shadow-sm"
+                            />
+                            {errors.data_conclusao && <p className="text-red-500 text-sm mt-1">{errors.data_conclusao}</p>}
                         </div>
 
                         {/* Campo Período */}

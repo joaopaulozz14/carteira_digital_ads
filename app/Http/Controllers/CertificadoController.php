@@ -62,7 +62,8 @@ class CertificadoController extends Controller
             'user_id' => Auth::id(),
             'categoria_id' => $request->categoria_id,
             'titulo' => $request->titulo,
-            'data_atividade' => $request->data_atividade,
+            'data_ingresso' => $request->data_ingresso,
+            'data_conclusao' => $request->data_conclusao,
             'periodo' => $request->periodo,
             'horas_declaradas' => $request->horas_declaradas,
             'status' => 'PENDENTE',
@@ -112,7 +113,7 @@ class CertificadoController extends Controller
      */
     public function update(UpdateCertificadoRequest $request, Certificado $certificado)
     {
-        $dados = $request->only(['categoria_id', 'titulo', 'data_atividade', 'periodo', 'horas_declaradas']);
+        $dados = $request->only(['categoria_id', 'titulo', 'data_ingresso', 'data_conclusao', 'periodo', 'horas_declaradas']);
 
         if ($request->hasFile('arquivo_path')) {
             Storage::disk('public')->delete($certificado->arquivo_path);
