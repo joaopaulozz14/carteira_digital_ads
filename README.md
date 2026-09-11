@@ -1,33 +1,141 @@
 # Carteira Digital de Certificados
 
-Sistema Web desenvolvido para centralizar o envio, validação e acompanhamento de certificados acadêmicos de **Horas Complementares** em Instituições Públicas de Ensino Superior.
+Sistema Web desenvolvido para centralizar o envio, validação e acompanhamento de certificados acadêmicos relacionados a **Horas Complementares**.
 
-O sistema permite que estudantes submetam certificados em PDF para análise, enquanto administradores realizam a validação e acompanham o andamento das solicitações.
+O projeto tem como contexto inicial o **Instituto Federal de Mato Grosso do Sul (IFMS)** e busca reduzir a burocracia associada ao armazenamento, submissão e validação de certificados, oferecendo ao estudante maior transparência sobre sua situação acadêmica.
+
+A arquitetura da aplicação foi estruturada de forma a permitir, futuramente, sua adaptação às regras de outras instituições públicas de ensino superior, como universidades federais e estaduais.
 
 ---
 
-# Tecnologias
+## Sumário
+
+- [Escopo do Projeto](#escopo-do-projeto)
+- [Tecnologias](#tecnologias)
+- [Requisitos para Execução](#requisitos-para-execução)
+- [Funcionalidades da Versão Beta](#funcionalidades-da-versão-beta)
+- [Instalação](#instalação)
+- [Usuários de Teste](#usuários-de-teste)
+- [Fluxo de Teste](#fluxo-de-teste)
+- [Estrutura do Projeto](#estrutura-do-projeto)
+- [Fluxo da Aplicação](#fluxo-da-aplicação)
+- [Testes](#testes)
+- [Próximas Funcionalidades](#próximas-funcionalidades)
+
+---
+
+## Escopo do Projeto
+
+O projeto foi inicialmente concebido como uma **Carteira Digital de Certificados**, com a possibilidade de centralizar diferentes tipos de certificados e atividades acadêmicas.
+
+Durante o desenvolvimento, o escopo foi deliberadamente reduzido para priorizar a entrega de uma aplicação funcional e reduzir a complexidade inicial.
+
+### Escopo atual
+
+A versão atual é destinada à **gerência de certificados de Horas Complementares**, contemplando:
+
+- Envio de certificados
+- Armazenamento dos documentos
+- Consulta dos certificados submetidos
+- Validação por responsável institucional
+- Aprovação ou rejeição
+- Acompanhamento do status
+
+### Fora do escopo atual
+
+Não fazem parte da implementação atual:
+
+- Emissão ou geração de certificados
+- Gerenciamento de estágio
+- Gerenciamento completo de atividades de extensão
+- Integração com gov.br
+- Sistema avançado de notificações
+- Aplicação mobile
+
+Esses recursos poderão ser considerados em versões futuras.
+
+> **Nota:** o sistema atualmente gerencia certificados já existentes. A emissão dos certificados pelas instituições ou pelos organizadores das atividades permanece fora do escopo da aplicação.
+
+---
+
+## Tecnologias
+
+### Backend
 
 - PHP 8.3+
 - Laravel 12
-- React
-- Inertia.js
-- Vite
-- MySQL
 - Eloquent ORM
+- Laravel Breeze
+- Form Requests
+- Policies *(previstas para a próxima etapa)*
+
+### Frontend
+
+- React 18
+- Inertia.js 2
+- Vite 7
+- Tailwind CSS
+- Axios
+
+### Banco de Dados
+
+- MySQL 8.0+
+
+### Controle de Versão
+
+- Git
+- GitHub
 
 ---
 
-# Funcionalidades da Versão Beta
+## Requisitos para Execução
 
-## Estudante
+Antes de executar o projeto, certifique-se de possuir:
+
+### PHP
+
+- PHP **8.3 ou superior**
+
+A instalação do PHP pode variar de acordo com o sistema operacional.
+
+### Composer
+
+- Composer **2.x**
+
+Verifique com:
+
+```bash
+composer --version
+```
+
+### Node.js e npm
+
+- Node.js **18 ou superior**
+- npm **9 ou superior**
+
+Verifique com:
+
+```bash
+node --version
+npm --version
+```
+
+### MySQL
+
+- MySQL **8.0 ou superior**
+
+---
+
+## Funcionalidades da Versão Beta
+
+### Estudante
 
 - Login
 - Dashboard
 - Listagem de certificados enviados
 - Envio de certificado (PDF)
 
-## Administrador
+### Administrador
 
 - Login
 - Dashboard
@@ -37,51 +145,42 @@ O sistema permite que estudantes submetam certificados em PDF para análise, enq
 
 ---
 
-# Instalação
+## Instalação
 
-## 1. Clonar o projeto
+### 1. Clonar o projeto
 
 ```bash
 git clone https://github.com/SEU_USUARIO/carteira_digital_certificados.git
-
 cd carteira_digital_certificados
 ```
 
----
-
-## 2. Instalar dependências do PHP
+### 2. Instalar dependências do PHP
 
 ```bash
 composer install
 ```
 
----
-
-## 3. Instalar dependências do Frontend
+### 3. Instalar dependências do Frontend
 
 ```bash
 npm install
 ```
 
----
+### 4. Configurar o arquivo .env
 
-## 4. Configurar o arquivo .env
-
-Copie o arquivo de exemplo.
+Copie o arquivo de exemplo:
 
 ```bash
 cp .env.example .env
 ```
 
-ou no Windows
+ou, no Windows:
 
 ```bash
 copy .env.example .env
 ```
 
-Configure as informações do banco.
-
-Exemplo:
+Configure as informações do banco. Exemplo:
 
 ```env
 DB_CONNECTION=mysql
@@ -92,25 +191,19 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 
----
-
-## 5. Gerar a chave da aplicação
+### 5. Gerar a chave da aplicação
 
 ```bash
 php artisan key:generate
 ```
 
----
-
-## 6. Executar as migrations
+### 6. Executar as migrations
 
 ```bash
 php artisan migrate
 ```
 
----
-
-## 7. Popular o banco de dados
+### 7. Popular o banco de dados
 
 ```bash
 php artisan db:seed
@@ -123,9 +216,7 @@ Esse comando criará:
 - Usuário Administrador
 - Usuário Estudante
 
----
-
-## 8. Criar o link do Storage
+### 8. Criar o link do Storage
 
 Necessário para visualizar os PDFs enviados.
 
@@ -133,17 +224,13 @@ Necessário para visualizar os PDFs enviados.
 php artisan storage:link
 ```
 
----
-
-## 9. Iniciar o servidor Laravel
+### 9. Iniciar o servidor Laravel
 
 ```bash
 php artisan serve
 ```
 
----
-
-## 10. Iniciar o Vite
+### 10. Iniciar o Vite
 
 Em outro terminal:
 
@@ -153,36 +240,28 @@ npm run dev
 
 ---
 
-# Usuários de Teste
+## Usuários de Teste
 
-## Administrador
-
-```
-Email:
-admin@cdc.com
-
-Senha:
-password
-```
-
----
-
-## Estudante
+### Administrador
 
 ```
-Email:
-aluno1@cdc.com
-aluno2@cdc.com
+Email: admin@cdc.com
+Senha: password
+```
 
-Senha:
-password
+### Estudante
+
+```
+Email: aluno1@cdc.com
+       aluno2@cdc.com
+Senha: password
 ```
 
 ---
 
-# Fluxo de Teste
+## Fluxo de Teste
 
-## Como estudante
+### Como estudante
 
 1. Fazer login
 2. Acessar "Novo Certificado"
@@ -191,17 +270,9 @@ password
 5. Informar horas
 6. Enviar um PDF
 
-Depois acessar:
+Depois, acessar **Meus Certificados** para visualizar o certificado enviado.
 
-```
-Meus Certificados
-```
-
-para visualizar o certificado enviado.
-
----
-
-## Como administrador
+### Como administrador
 
 1. Fazer login
 2. Acessar "Gerenciar Certificados"
@@ -210,33 +281,82 @@ para visualizar o certificado enviado.
 
 ---
 
-# Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 app/
-    Http/
-        Controllers/
-        Requests/
-
-    Models/
-
+├── Http/
+│   ├── Controllers/
+│   └── Requests/
+│
+├── Models/
+│
 database/
-    migrations/
-    seeders/
-
+├── migrations/
+└── seeders/
+│
 resources/
-    js/
-        Pages/
-            Dashboard/
-            Certificados/
-
+└── js/
+    ├── Components/
+    ├── Layouts/
+    └── Pages/
+        ├── Auth/
+        ├── Dashboard/
+        ├── Certificados/
+        └── Profile/
+│
 routes/
-    web.php
+└── web.php
 ```
 
 ---
 
-# Próximas Funcionalidades
+## Fluxo da Aplicação
+
+```
+Login
+  ↓
+Dashboard
+  ↓
+Enviar Certificado
+  ↓
+Administrador Analisa
+  ↓
+Aprovar/Rejeitar
+  ↓
+Status Atualizado
+```
+
+---
+
+## Testes
+
+Estrutura prevista para condução de testes:
+
+### Funcionalidades
+
+- Autenticação
+- Cadastro de certificados
+- Upload de documentos
+- Consultas de certificados
+- Aprovação e rejeição
+
+### Autorização
+
+- Estudante acessa somente seus próprios certificados
+- Administrador acessa certificados de diferentes estudantes
+- Tentativa de estudante de realizar ações administrativas
+
+### Regras de Negócio
+
+- Cálculo de horas
+- Limites institucionais
+- Regras por categoria
+- Regras por período/semestre
+
+---
+
+## Próximas Funcionalidades
 
 - Policies (Controle de Permissões)
 - Dashboard com progresso de horas
@@ -246,31 +366,9 @@ routes/
 - Regras específicas por instituição
 - Sistema de notificações
 - Pesquisa e filtros
-  
+
 ---
 
-# Fluxo da Aplicação
-
-```
-Login
-
-↓
-
-Dashboard
-
-↓
-
-Enviar Certificado
-
-↓
-
-Administrador Analisa
-
-↓
-
-Aprovar/Rejeitar
-
-↓
-
-Status Atualizado
-```
+## Pacotes Utilizados
+- doctrine/dbal;
+- laravel breeze;
