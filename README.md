@@ -366,3 +366,9 @@ Estrutura prevista para condução de testes:
 - Regras específicas por instituição
 - Sistema de notificações
 - Pesquisa e filtros
+
+---
+
+## Pacotes Utilizados
+- doctrine/dbal;
+- laravel breeze;
