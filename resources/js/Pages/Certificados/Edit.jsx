@@ -10,7 +10,8 @@ export default function Edit({ certificado, categorias }) {
     const { data, setData, post, processing, errors } = useForm({
         categoria_id: certificado.categoria_id,
         titulo: certificado.titulo,
-        data_atividade: certificado.data_atividade,
+        data_ingresso: certificado.data_ingresso,
+        data_conclusao: certificado.data_conclusao,
         periodo: certificado.periodo,
         horas_declaradas: certificado.horas_declaradas,
         arquivo_path: null,
@@ -64,19 +65,31 @@ export default function Edit({ certificado, categorias }) {
                             />
                             <InputError message={errors.titulo} className="mt-2" />
                         </div>
-                        
+
+
                         <div>
-                            <InputLabel htmlFor="data_atividade" value="Data da Atividade" />
-                            <TextInput
-                                id="data_atividade"
+                            <label className="block text-sm font-medium text-gray-700">Data de Ingresso</label>
+                            <input
                                 type="date"
-                                name="data_atividade"
-                                value={data.data_atividade}
+                                value={data.data_ingresso}
                                 max={new Date().toISOString().split('T')[0]}
-                                className="mt-1 block w-full"
-                                onChange={(e) => setData('data_atividade', e.target.value)}
+                                onChange={e => setData('data_ingresso', e.target.value)}
+                                className="mt-1 block w-full rounded border-gray-300 shadow-sm"
                             />
-                            <InputError message={errors.data_atividade} className="mt-2" />
+                            {errors.data_ingresso && <p className="text-red-500 text-sm mt-1">{errors.data_ingresso}</p>}
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700">Data de Conclusão</label>
+                            <input
+                                type="date"
+                                value={data.data_conclusao}
+                                min={data.data_ingresso || undefined}
+                                max={new Date().toISOString().split('T')[0]}
+                                onChange={e => setData('data_conclusao', e.target.value)}
+                                className="mt-1 block w-full rounded border-gray-300 shadow-sm"
+                            />
+                            {errors.data_conclusao && <p className="text-red-500 text-sm mt-1">{errors.data_conclusao}</p>}
                         </div>
 
                         <div>
