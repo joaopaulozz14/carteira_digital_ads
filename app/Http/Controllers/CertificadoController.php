@@ -141,24 +141,21 @@ class CertificadoController extends Controller
 
     public function aprovar(Certificado $certificado)
     {
+        $this->authorize('aprovar', $certificado);
+
         $certificado->status = 'APROVADO';
         $certificado->save();
 
-        return back();
+        return back()->with('success', 'Certificado aprovado.');
     }
 
     public function rejeitar(Certificado $certificado)
     {
+        $this->authorize('rejeitar', $certificado);
+
         $certificado->status = 'REJEITADO';
         $certificado->save();
 
-        return back();
-    }
-
-    private function authorizeView(Certificado $certificado): void
-    {
-        if ($certificado->user_id !== Auth::id() && Auth::user()->tipo !== 'ADMIN') {
-            abort(403);
-        }
+        return back()->with('success', 'Certificado rejeitado.');
     }
 }
