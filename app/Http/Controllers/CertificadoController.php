@@ -19,24 +19,19 @@ class CertificadoController extends Controller
      */
     public function index()
     {
-        // For now, there's still not a separation between institutions, so we will show all certificates to admins and only the user's own certificates to students.
-        if (Auth::user()->tipo === 'ADMIN') {
+        $user = Auth::user();
 
-            $certificados = Certificado::with([
-                'user',
-                'categoria'
-            ])->get();
+        if ($user->tipo === 'ADMIN') {
+            $certificados = Certificado::with(['user', 'categoria'])
+                ->whereHas('user', fn($query) => $query->where('instituicao_id', $user->instituicao_id))
+                ->get();
         } else {
-
             $certificados = Certificado::with('categoria')
-                ->where('user_id', Auth::id())
+                ->where('user_id', $user->id)
                 ->get();
         }
 
-        return Inertia::render(
-            'Certificados/Index',
-            compact('certificados')
-        );
+        return Inertia::render('Certificados/Index', compact('certificados'));
     }
 
     /**
@@ -83,13 +78,12 @@ class CertificadoController extends Controller
      */
     public function show(Certificado $certificado)
     {
-        $this->authorizeView($certificado);
+        $this->authorize('view', $certificado);
 
         return Inertia::render('Certificados/Show', [
             'certificado' => $certificado->load('categoria', 'user'),
         ]);
     }
-
     /**
      * Show the form for editing the specified resource.
      */
