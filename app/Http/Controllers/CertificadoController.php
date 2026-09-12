@@ -84,12 +84,13 @@ class CertificadoController extends Controller
             'certificado' => $certificado->load('categoria', 'user'),
         ]);
     }
+
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Certificado $certificado)
     {
-        $this->authorizeView($certificado);
+        $this->authorize('view', $certificado); // só ownership/instituição aqui
 
         if ($certificado->status !== 'PENDENTE' && Auth::user()->tipo !== 'ADMIN') {
             return redirect()
@@ -102,6 +103,7 @@ class CertificadoController extends Controller
             'categorias' => Categoria::all(),
         ]);
     }
+
     /**
      * Update the specified resource in storage.
      */
@@ -126,7 +128,7 @@ class CertificadoController extends Controller
      */
     public function destroy(Certificado $certificado)
     {
-        $this->authorizeView($certificado);
+        $this->authorize('delete', $certificado);
 
         Storage::disk('public')->delete($certificado->arquivo_path);
         $certificado->delete();
@@ -135,6 +137,7 @@ class CertificadoController extends Controller
             ->route('certificados.index')
             ->with('success', 'Certificado excluído com sucesso.');
     }
+
 
     public function aprovar(Certificado $certificado)
     {
