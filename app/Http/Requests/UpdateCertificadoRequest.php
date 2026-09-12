@@ -13,19 +13,7 @@ class UpdateCertificadoRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        $certificado = $this->route('certificado'); // If it breaks in a unit test, you might need to adjust this line to get the certificado from the request data instead of the route.
-        
-        $user = $this->user();
-
-        if ($user->tipo === 'ADMIN') {
-            return true; // admins podem editar qualquer certificado
-        }
-
-        if ($user->tipo === 'ESTUDANTE' && $certificado->user_id === $user->id && $certificado->status === 'PENDENTE') {
-            return true; // estudante só edita o próprio certificado, e só enquanto PENDENTE
-        }
-
-        return false;
+        return $this->user()->can('update', $this->route('certificado')); // delegate authorization to the CertificadoPolicy's update method
     }
 
     /**
