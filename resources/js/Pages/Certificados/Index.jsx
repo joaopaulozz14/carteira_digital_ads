@@ -21,7 +21,7 @@ export default function Index({ certificados }) {
     return (
         <AuthenticatedLayout
             header={
-                <h2 className="font-display font-semibold text-[22px] text-text-heading">
+                <h2 className="font-display font-semibold text-2xl text-text-heading">
                     {isAdmin ? 'Gerenciar Certificados' : 'Meus Certificados'}
                 </h2>
             }
@@ -31,7 +31,7 @@ export default function Index({ certificados }) {
             <div className="bg-bg-banner min-h-[calc(100vh-64px)] py-10">
                 <div className="max-w-7xl mx-auto px-4 md:px-8">
                     <div className="bg-white rounded-card shadow-card p-6 md:p-8">
-                        <h1 className="font-display font-semibold text-[20px] text-text-heading mb-6">
+                        <h1 className="font-display font-semibold text-xl text-text-heading mb-6">
                             {isAdmin ? 'Todos os Certificados' : 'Lista de Certificados'}
                         </h1>
 
@@ -40,17 +40,17 @@ export default function Index({ certificados }) {
                                 <thead>
                                     <tr>
                                         {isAdmin && (
-                                            <th scope="col" className="text-left text-xs font-semibold text-text-table-head bg-bg-input px-6 py-3">
+                                            <th scope="col" className="text-left text-sm font-semibold text-text-table-head bg-bg-input px-6 py-3.5">
                                                 Aluno
                                             </th>
                                         )}
-                                        <th scope="col" className="text-left text-xs font-semibold text-text-table-head bg-bg-input px-6 py-3">
+                                        <th scope="col" className="text-left text-sm font-semibold text-text-table-head bg-bg-input px-6 py-3.5">
                                             Título
                                         </th>
-                                        <th scope="col" className="text-left text-xs font-semibold text-text-table-head bg-bg-input px-6 py-3">
+                                        <th scope="col" className="text-left text-sm font-semibold text-text-table-head bg-bg-input px-6 py-3.5">
                                             Status
                                         </th>
-                                        <th scope="col" className="text-left text-xs font-semibold text-text-table-head bg-bg-input px-6 py-3">
+                                        <th scope="col" className="text-left text-sm font-semibold text-text-table-head bg-bg-input px-6 py-3.5">
                                             Ações
                                         </th>
                                     </tr>
@@ -66,23 +66,23 @@ export default function Index({ certificados }) {
                                                 className="border-t border-[#EEF1F5] hover:bg-bg-input/60 transition-colors"
                                             >
                                                 {isAdmin && (
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-text-heading">
+                                                    <td className="px-6 py-4 whitespace-nowrap text-base text-text-heading">
                                                         {certificado.user?.name || 'Não informado'}
                                                     </td>
                                                 )}
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-text-heading">
+                                                <td className="px-6 py-4 whitespace-nowrap text-base font-semibold text-text-heading">
                                                     {certificado.titulo}
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                                <td className="px-6 py-4 whitespace-nowrap text-base">
                                                     <span
-                                                        className={`inline-flex items-center rounded-pill px-3.5 py-1.5 text-[12.5px] font-semibold ${
+                                                        className={`inline-flex items-center rounded-pill px-4 py-2 text-sm font-semibold ${
                                                             statusStyles[certificado.status] || 'bg-bg-input text-text-secondary'
                                                         }`}
                                                     >
                                                         {certificado.status}
                                                     </span>
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                                <td className="px-6 py-4 whitespace-nowrap text-base font-medium">
                                                     <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
                                                         <Link
                                                             href={route('certificados.show', certificado.id)}
@@ -134,7 +134,7 @@ export default function Index({ certificados }) {
                                         <tr className="border-t border-[#EEF1F5]">
                                             <td
                                                 colSpan={isAdmin ? 4 : 3}
-                                                className="px-6 py-8 text-center text-sm text-text-secondary"
+                                                className="px-6 py-8 text-center text-base text-text-secondary"
                                             >
                                                 Nenhum certificado encontrado.
                                             </td>
