@@ -2,6 +2,12 @@ import React from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, usePage, router, Link } from '@inertiajs/react';
 
+const statusStyles = {
+    PENDENTE: 'bg-status-amber-badge text-status-amber-text',
+    APROVADO: 'bg-status-green-bg text-status-green-text',
+    REJEITADO: 'bg-status-red text-white',
+};
+
 export default function Index({ certificados }) {
     const { auth } = usePage().props;
     const isAdmin = auth.user.tipo === 'ADMIN';
@@ -15,110 +21,128 @@ export default function Index({ certificados }) {
     return (
         <AuthenticatedLayout
             header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800">
+                <h2 className="font-display font-semibold text-[22px] text-text-heading">
                     {isAdmin ? 'Gerenciar Certificados' : 'Meus Certificados'}
                 </h2>
             }
         >
             <Head title="Certificados" />
 
-            <div className="max-w-7xl mx-auto p-6">
-                <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                    <h1 className="text-2xl font-bold text-gray-900 mb-6">
-                        {isAdmin ? 'Todos os Certificados' : 'Lista de Certificados'}
-                    </h1>
+            <div className="bg-bg-banner min-h-[calc(100vh-64px)] py-10">
+                <div className="max-w-7xl mx-auto px-4 md:px-8">
+                    <div className="bg-white rounded-card shadow-card p-6 md:p-8">
+                        <h1 className="font-display font-semibold text-[20px] text-text-heading mb-6">
+                            {isAdmin ? 'Todos os Certificados' : 'Lista de Certificados'}
+                        </h1>
 
-                    <div className="overflow-x-auto">
-                        <table className="min-w-full divide-y divide-gray-200">
-                            <thead className="bg-gray-50">
-                                <tr>
-                                    {isAdmin && (
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Aluno
+                        <div className="overflow-x-auto rounded-card border border-[#EEF1F5]">
+                            <table className="w-full min-w-[640px] border-collapse">
+                                <thead>
+                                    <tr>
+                                        {isAdmin && (
+                                            <th scope="col" className="text-left text-xs font-semibold text-text-table-head bg-bg-input px-6 py-3">
+                                                Aluno
+                                            </th>
+                                        )}
+                                        <th scope="col" className="text-left text-xs font-semibold text-text-table-head bg-bg-input px-6 py-3">
+                                            Título
                                         </th>
-                                    )}
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Título
-                                    </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Status
-                                    </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Ações
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody className="bg-white divide-y divide-gray-200">
-                                {certificados.map((certificado) => {
-                                    const isDono = certificado.user_id === auth.user.id;
-                                    const podeEditar = isDono && certificado.status === 'PENDENTE';
+                                        <th scope="col" className="text-left text-xs font-semibold text-text-table-head bg-bg-input px-6 py-3">
+                                            Status
+                                        </th>
+                                        <th scope="col" className="text-left text-xs font-semibold text-text-table-head bg-bg-input px-6 py-3">
+                                            Ações
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {certificados.map((certificado) => {
+                                        const isDono = certificado.user_id === auth.user.id;
+                                        const podeEditar = isDono && certificado.status === 'PENDENTE';
 
-                                    return (
-                                        <tr key={certificado.id} className="hover:bg-gray-50">
-                                            {isAdmin && (
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                    {certificado.user?.name || 'Não informado'}
+                                        return (
+                                            <tr
+                                                key={certificado.id}
+                                                className="border-t border-[#EEF1F5] hover:bg-bg-input/60 transition-colors"
+                                            >
+                                                {isAdmin && (
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-text-heading">
+                                                        {certificado.user?.name || 'Não informado'}
+                                                    </td>
+                                                )}
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-text-heading">
+                                                    {certificado.titulo}
                                                 </td>
-                                            )}
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                {certificado.titulo}
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                                <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                                    ${certificado.status === 'PENDENTE' ? 'bg-yellow-100 text-yellow-800' : ''}
-                                                    ${certificado.status === 'APROVADO' ? 'bg-green-100 text-green-800' : ''}
-                                                    ${certificado.status === 'REJEITADO' ? 'bg-red-100 text-red-800' : ''}
-                                                `}>
-                                                    {certificado.status}
-                                                </span>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-3">
-                                                <Link
-                                                    href={route('certificados.show', certificado.id)}
-                                                    className="text-indigo-600 hover:text-indigo-900"
-                                                >
-                                                    Ver
-                                                </Link>
-
-                                                {isAdmin && certificado.status === 'PENDENTE' && (
-                                                    <>
-                                                        <button
-                                                            onClick={() => router.patch(route('certificados.aprovar', certificado.id))}
-                                                            className="text-green-600 hover:text-green-900"
-                                                        >
-                                                            Aprovar
-                                                        </button>
-                                                        <button
-                                                            onClick={() => router.patch(route('certificados.rejeitar', certificado.id))}
-                                                            className="text-red-600 hover:text-red-900"
-                                                        >
-                                                            Rejeitar
-                                                        </button>
-                                                    </>
-                                                )}
-
-                                                {podeEditar && (
-                                                    <>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                                    <span
+                                                        className={`inline-flex items-center rounded-pill px-3.5 py-1.5 text-[12.5px] font-semibold ${
+                                                            statusStyles[certificado.status] || 'bg-bg-input text-text-secondary'
+                                                        }`}
+                                                    >
+                                                        {certificado.status}
+                                                    </span>
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
                                                         <Link
-                                                            href={route('certificados.edit', certificado.id)}
-                                                            className="text-blue-600 hover:text-blue-900"
+                                                            href={route('certificados.show', certificado.id)}
+                                                            className="text-action-blue hover:text-action-blue-dark hover:underline"
                                                         >
-                                                            Editar
+                                                            Ver
                                                         </Link>
-                                                        <button
-                                                            onClick={() => handleExcluir(certificado)}
-                                                            className="text-red-600 hover:text-red-900"
-                                                        >
-                                                            Excluir
-                                                        </button>
-                                                    </>
-                                                )}
+
+                                                        {isAdmin && certificado.status === 'PENDENTE' && (
+                                                            <>
+                                                                <button
+                                                                    onClick={() => router.patch(route('certificados.aprovar', certificado.id))}
+                                                                    className="text-status-green-text hover:underline"
+                                                                >
+                                                                    Aprovar
+                                                                </button>
+                                                                <button
+                                                                    onClick={() => router.patch(route('certificados.rejeitar', certificado.id))}
+                                                                    className="text-status-red-text hover:underline"
+                                                                >
+                                                                    Rejeitar
+                                                                </button>
+                                                            </>
+                                                        )}
+
+                                                        {podeEditar && (
+                                                            <>
+                                                                <Link
+                                                                    href={route('certificados.edit', certificado.id)}
+                                                                    className="text-action-blue hover:text-action-blue-dark hover:underline"
+                                                                >
+                                                                    Editar
+                                                                </Link>
+                                                                <button
+                                                                    onClick={() => handleExcluir(certificado)}
+                                                                    className="text-status-red-text hover:underline"
+                                                                >
+                                                                    Excluir
+                                                                </button>
+                                                            </>
+                                                        )}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        );
+                                    })}
+
+                                    {certificados.length === 0 && (
+                                        <tr className="border-t border-[#EEF1F5]">
+                                            <td
+                                                colSpan={isAdmin ? 4 : 3}
+                                                className="px-6 py-8 text-center text-sm text-text-secondary"
+                                            >
+                                                Nenhum certificado encontrado.
                                             </td>
                                         </tr>
-                                    );
-                                })}
-                            </tbody>
-                        </table>
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
