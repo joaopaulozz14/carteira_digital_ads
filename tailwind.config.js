@@ -15,8 +15,16 @@ export default {
         'text-heading': '#2D323D',
         'text-secondary': '#7D818D',
         'text-table-head': '#848D94',
-        'bg-banner': '#F4F7FD',
+        'bg-banner': '#E4EAF2',
         'bg-input': '#F4F6F8',
+
+        // Cores de status (faltando)
+        'status-green-bg': '#D0F3C4',
+        'status-green-text': '#2E5A21',
+        'status-amber-badge': '#FFE4A3',
+        'status-amber-text': '#6B4E00',
+        'status-red': '#CF928B',
+        'status-red-text': '#7A2E24',
       },
       fontFamily: {
         display: ['Poppins', 'Segoe UI', 'system-ui', 'sans-serif'],
