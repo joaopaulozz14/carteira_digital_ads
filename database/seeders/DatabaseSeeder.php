@@ -21,7 +21,8 @@ class DatabaseSeeder extends Seeder
             [
                 InstituicaoSeeder::class,
                 UserSeeder::class,
-                CategoriaSeeder::class
+                CategoriaSeeder::class,
+                CertificadoSeeder::class,
             ]
         );
 
