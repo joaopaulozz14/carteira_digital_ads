@@ -15,7 +15,7 @@ export default {
         'text-heading': '#2D323D',
         'text-secondary': '#7D818D',
         'text-table-head': '#848D94',
-        'bg-banner': '#E4EAF2',
+        'bg-banner': '#0C1D33/6',
         'bg-input': '#F4F6F8',
 
         // Cores de status (faltando)
