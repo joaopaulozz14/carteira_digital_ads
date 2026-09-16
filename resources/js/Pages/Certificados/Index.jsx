@@ -48,6 +48,9 @@ export default function Index({ certificados }) {
                                             Título
                                         </th>
                                         <th scope="col" className="text-left text-sm font-semibold text-text-table-head bg-bg-input px-6 py-3.5">
+                                            Atividade
+                                        </th>
+                                        <th scope="col" className="text-left text-sm font-semibold text-text-table-head bg-bg-input px-6 py-3.5">
                                             Status
                                         </th>
                                         <th scope="col" className="text-left text-sm font-semibold text-text-table-head bg-bg-input px-6 py-3.5">
@@ -73,11 +76,13 @@ export default function Index({ certificados }) {
                                                 <td className="px-6 py-4 whitespace-nowrap text-base font-semibold text-text-heading">
                                                     {certificado.titulo}
                                                 </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-base text-text-heading">
+                                                    {certificado.atividade?.nome}
+                                                </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-base">
                                                     <span
-                                                        className={`inline-flex items-center rounded-pill px-4 py-2 text-sm font-semibold ${
-                                                            statusStyles[certificado.status] || 'bg-bg-input text-text-secondary'
-                                                        }`}
+                                                        className={`inline-flex items-center rounded-pill px-4 py-2 text-sm font-semibold ${statusStyles[certificado.status] || 'bg-bg-input text-text-secondary'
+                                                            }`}
                                                     >
                                                         {certificado.status}
                                                     </span>
@@ -133,7 +138,7 @@ export default function Index({ certificados }) {
                                     {certificados.length === 0 && (
                                         <tr className="border-t border-[#EEF1F5]">
                                             <td
-                                                colSpan={isAdmin ? 4 : 3}
+                                                colSpan={isAdmin ? 5 : 4}
                                                 className="px-6 py-8 text-center text-base text-text-secondary"
                                             >
                                                 Nenhum certificado encontrado.

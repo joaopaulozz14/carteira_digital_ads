@@ -47,19 +47,21 @@ export default function Show({ certificado }) {
                                 )}
                             </div>
                             <span
-                                className={`inline-flex items-center rounded-pill px-4 py-2 text-sm font-semibold ${
-                                    statusStyles[certificado.status] || 'bg-bg-input text-text-secondary'
-                                }`}
+                                className={`inline-flex items-center rounded-pill px-4 py-2 text-sm font-semibold ${statusStyles[certificado.status] || 'bg-bg-input text-text-secondary'
+                                    }`}
                             >
                                 {certificado.status}
                             </span>
                         </div>
-
                         {/* Dados do certificado */}
                         <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5 border-t border-[#EEF1F5] pt-6">
                             <div>
+                                <dt className="text-sm font-medium text-text-secondary">Atividade</dt>
+                                <dd className="mt-1 text-base text-text-heading">{certificado.atividade?.nome}</dd>
+                            </div>
+                            <div>
                                 <dt className="text-sm font-medium text-text-secondary">Categoria</dt>
-                                <dd className="mt-1 text-base text-text-heading">{certificado.categoria?.nome}</dd>
+                                <dd className="mt-1 text-base text-text-heading">{certificado.atividade?.categoria?.nome}</dd>
                             </div>
                             <div>
                                 <dt className="text-sm font-medium text-text-secondary">Período</dt>
@@ -94,6 +96,13 @@ export default function Show({ certificado }) {
                                 </dd>
                             </div>
                         </dl>
+
+                        {certificado.atividade?.regra_pontuacao && (
+                            <div className="mt-4 rounded-input bg-bg-input px-4 py-3 text-sm text-text-secondary">
+                                <strong className="text-text-heading">Regra de pontuação:</strong>{' '}
+                                {certificado.atividade.regra_pontuacao}
+                            </div>
+                        )}
 
                         {/* Justificativa de rejeição */}
                         {certificado.status === 'REJEITADO' && certificado.justificativa && (

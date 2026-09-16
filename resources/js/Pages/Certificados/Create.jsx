@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, useForm } from '@inertiajs/react';
 
-export default function Create({ categorias }) {
+export default function Create({ atividades }) {
     const { data, setData, post, processing, errors, reset } = useForm({
-        categoria_id: '',
+        atividade_id: '',
         titulo: '',
         data_ingresso: '',
         data_conclusao: '',
@@ -21,6 +21,25 @@ export default function Create({ categorias }) {
         });
     };
 
+    // Agrupa as atividades por categoria, na ordem em que chegam do backend
+    const atividadesPorCategoria = useMemo(() => {
+        const grupos = new Map();
+
+        for (const atividade of atividades) {
+            const nomeCategoria = atividade.categoria?.nome ?? 'Outras';
+            if (!grupos.has(nomeCategoria)) {
+                grupos.set(nomeCategoria, []);
+            }
+            grupos.get(nomeCategoria).push(atividade);
+        }
+
+        return Array.from(grupos.entries());
+    }, [atividades]);
+
+    const atividadeSelecionada = atividades.find(
+        (atividade) => String(atividade.id) === String(data.atividade_id)
+    );
+
     return (
         <AuthenticatedLayout
             header={
@@ -36,25 +55,37 @@ export default function Create({ categorias }) {
                     <div className="bg-white rounded-card shadow-card p-6 md:p-8">
                         <form onSubmit={handleSubmit} className="space-y-6">
 
-                            {/* Campo Categoria */}
+                            {/* Campo Atividade (agrupado por Categoria) */}
                             <div>
                                 <label className="block text-base font-medium text-text-heading mb-2">
-                                    Categoria
+                                    Atividade
                                 </label>
                                 <select
-                                    value={data.categoria_id}
-                                    onChange={e => setData('categoria_id', e.target.value)}
+                                    value={data.atividade_id}
+                                    onChange={e => setData('atividade_id', e.target.value)}
                                     className="ds-select w-full min-h-touch px-4 py-3 bg-bg-input border border-transparent rounded-input text-base text-text-heading focus:border-action-blue focus:outline-none"
                                 >
-                                    <option value="">Selecione uma categoria</option>
-                                    {categorias.map(categoria => (
-                                        <option key={categoria.id} value={categoria.id}>
-                                            {categoria.nome}
-                                        </option>
+                                    <option value="">Selecione uma atividade</option>
+                                    {atividadesPorCategoria.map(([nomeCategoria, itens]) => (
+                                        <optgroup key={nomeCategoria} label={nomeCategoria}>
+                                            {itens.map(atividade => (
+                                                <option key={atividade.id} value={atividade.id}>
+                                                    {atividade.nome}
+                                                </option>
+                                            ))}
+                                        </optgroup>
                                     ))}
                                 </select>
-                                {errors.categoria_id && (
-                                    <p className="text-status-red-text text-sm mt-1.5">{errors.categoria_id}</p>
+                                {errors.atividade_id && (
+                                    <p className="text-status-red-text text-sm mt-1.5">{errors.atividade_id}</p>
+                                )}
+
+                                {/* Regra de pontuação da atividade escolhida */}
+                                {atividadeSelecionada && (
+                                    <div className="mt-2 rounded-input bg-bg-input px-4 py-3 text-sm text-text-secondary">
+                                        <strong className="text-text-heading">Regra de pontuação:</strong>{' '}
+                                        {atividadeSelecionada.regra_pontuacao}
+                                    </div>
                                 )}
                             </div>
 
@@ -114,6 +145,9 @@ export default function Create({ categorias }) {
                                 <label className="block text-base font-medium text-text-heading mb-2">
                                     Período
                                 </label>
+                                <p className="text-sm text-text-secondary mb-1.5">
+                                    Use o período em que a atividade foi <strong>concluída</strong>, não o de início.
+                                </p>
                                 <input
                                     type="text"
                                     value={data.periodo}

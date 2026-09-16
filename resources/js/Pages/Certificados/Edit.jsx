@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import InputLabel from '@/Components/InputLabel';
 import TextInput from '@/Components/TextInput';
@@ -6,9 +6,9 @@ import InputError from '@/Components/InputError';
 import PrimaryButton from '@/Components/PrimaryButton';
 import { Head, Link, useForm } from '@inertiajs/react';
 
-export default function Edit({ certificado, categorias }) {
+export default function Edit({ certificado, atividades }) {
     const { data, setData, post, processing, errors } = useForm({
-        categoria_id: certificado.categoria_id,
+        atividade_id: certificado.atividade_id,
         titulo: certificado.titulo,
         data_ingresso: certificado.data_ingresso,
         data_conclusao: certificado.data_conclusao,
@@ -17,6 +17,25 @@ export default function Edit({ certificado, categorias }) {
         arquivo_path: null,
         _method: 'put',
     });
+
+    // Agrupa as atividades por categoria, na ordem em que chegam do backend
+    const atividadesPorCategoria = useMemo(() => {
+        const grupos = new Map();
+
+        for (const atividade of atividades) {
+            const nomeCategoria = atividade.categoria?.nome ?? 'Outras';
+            if (!grupos.has(nomeCategoria)) {
+                grupos.set(nomeCategoria, []);
+            }
+            grupos.get(nomeCategoria).push(atividade);
+        }
+
+        return Array.from(grupos.entries());
+    }, [atividades]);
+
+    const atividadeSelecionada = atividades.find(
+        (atividade) => String(atividade.id) === String(data.atividade_id)
+    );
 
     const submit = (e) => {
         e.preventDefault();
@@ -37,21 +56,33 @@ export default function Edit({ certificado, categorias }) {
                 <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                     <form onSubmit={submit} className="space-y-6">
                         <div>
-                            <InputLabel htmlFor="categoria_id" value="Categoria" />
+                            <InputLabel htmlFor="atividade_id" value="Atividade" />
                             <select
-                                id="categoria_id"
-                                name="categoria_id"
-                                value={data.categoria_id}
-                                onChange={(e) => setData('categoria_id', e.target.value)}
+                                id="atividade_id"
+                                name="atividade_id"
+                                value={data.atividade_id}
+                                onChange={(e) => setData('atividade_id', e.target.value)}
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                             >
-                                {categorias.map((categoria) => (
-                                    <option key={categoria.id} value={categoria.id}>
-                                        {categoria.nome}
-                                    </option>
+                                {atividadesPorCategoria.map(([nomeCategoria, itens]) => (
+                                    <optgroup key={nomeCategoria} label={nomeCategoria}>
+                                        {itens.map((atividade) => (
+                                            <option key={atividade.id} value={atividade.id}>
+                                                {atividade.nome}
+                                                {!atividade.ativo ? ' (inativa)' : ''}
+                                            </option>
+                                        ))}
+                                    </optgroup>
                                 ))}
                             </select>
-                            <InputError message={errors.categoria_id} className="mt-2" />
+                            <InputError message={errors.atividade_id} className="mt-2" />
+
+                            {atividadeSelecionada && (
+                                <div className="mt-2 rounded-md bg-gray-50 px-4 py-3 text-sm text-gray-600">
+                                    <strong className="text-gray-800">Regra de pontuação:</strong>{' '}
+                                    {atividadeSelecionada.regra_pontuacao}
+                                </div>
+                            )}
                         </div>
 
                         <div>
@@ -65,7 +96,6 @@ export default function Edit({ certificado, categorias }) {
                             />
                             <InputError message={errors.titulo} className="mt-2" />
                         </div>
-
 
                         <div>
                             <label className="block text-sm font-medium text-gray-700">Data de Ingresso</label>
@@ -94,6 +124,9 @@ export default function Edit({ certificado, categorias }) {
 
                         <div>
                             <InputLabel htmlFor="periodo" value="Período" />
+                            <p className="text-sm text-gray-500 mb-1">
+                                Use o período em que a atividade foi <strong>concluída</strong>, não o de início.
+                            </p>
                             <TextInput
                                 id="periodo"
                                 name="periodo"
