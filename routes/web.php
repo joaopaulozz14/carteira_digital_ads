@@ -8,7 +8,7 @@ use App\Http\Controllers\CertificadoController;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
+    return Inertia::render('Auth/Login', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
