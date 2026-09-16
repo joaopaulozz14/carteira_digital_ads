@@ -10,6 +10,7 @@ use Inertia\Inertia;
 use App\Http\Requests\StoreCertificadoRequest;
 use App\Http\Requests\UpdateCertificadoRequest;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Atividade;
 
 
 class CertificadoController extends Controller
@@ -22,11 +23,11 @@ class CertificadoController extends Controller
         $user = Auth::user();
 
         if ($user->tipo === 'ADMIN') {
-            $certificados = Certificado::with(['user', 'categoria'])
+            $certificados = Certificado::with(['user', 'atividade.categoria'])
                 ->whereHas('user', fn($query) => $query->where('instituicao_id', $user->instituicao_id))
                 ->get();
         } else {
-            $certificados = Certificado::with('categoria')
+            $certificados = Certificado::with('atividade.categoria')
                 ->where('user_id', $user->id)
                 ->get();
         }
@@ -37,12 +38,18 @@ class CertificadoController extends Controller
     /**
      * Show the form for creating a new resource.
      */
+
     public function create()
     {
-        $categorias = Categoria::all();
+        $atividades = Atividade::whereHas('categoria', function ($query) {
+            $query->where('curso_id', Auth::user()->curso_id);
+        })
+            ->where('ativo', true)
+            ->with('categoria')
+            ->get();
 
         return Inertia::render('Certificados/Create', [
-            'categorias' => $categorias
+            'atividades' => $atividades,
         ]);
     }
 
@@ -55,7 +62,7 @@ class CertificadoController extends Controller
 
         Certificado::create([
             'user_id' => Auth::id(),
-            'categoria_id' => $request->categoria_id,
+            'atividade_id' => $request->atividade_id,
             'titulo' => $request->titulo,
             'data_ingresso' => $request->data_ingresso,
             'data_conclusao' => $request->data_conclusao,
@@ -81,7 +88,7 @@ class CertificadoController extends Controller
         $this->authorize('view', $certificado);
 
         return Inertia::render('Certificados/Show', [
-            'certificado' => $certificado->load('categoria', 'user'),
+            'certificado' => $certificado->load('atividade.categoria', 'user'),
         ]);
     }
 
@@ -90,7 +97,7 @@ class CertificadoController extends Controller
      */
     public function edit(Certificado $certificado)
     {
-        $this->authorize('view', $certificado); // só ownership/instituição aqui
+        $this->authorize('view', $certificado);
 
         if ($certificado->status !== 'PENDENTE' && Auth::user()->tipo !== 'ADMIN') {
             return redirect()
@@ -98,9 +105,19 @@ class CertificadoController extends Controller
                 ->with('error', 'Este certificado já foi analisado e não pode mais ser editado.');
         }
 
+        // curso do DONO do certificado, não de quem está editando (importa quando é o admin)
+        $atividades = Atividade::whereHas('categoria', function ($query) use ($certificado) {
+            $query->where('curso_id', $certificado->user->curso_id);
+        })
+            ->where(function ($query) use ($certificado) {
+                $query->where('ativo', true)->orWhere('id', $certificado->atividade_id);
+            })
+            ->with('categoria')
+            ->get();
+
         return Inertia::render('Certificados/Edit', [
-            'certificado' => $certificado->load('categoria'),
-            'categorias' => Categoria::all(),
+            'certificado' => $certificado->load('atividade'),
+            'atividades' => $atividades,
         ]);
     }
 
@@ -109,7 +126,14 @@ class CertificadoController extends Controller
      */
     public function update(UpdateCertificadoRequest $request, Certificado $certificado)
     {
-        $dados = $request->only(['categoria_id', 'titulo', 'data_ingresso', 'data_conclusao', 'periodo', 'horas_declaradas']);
+        $dados = $request->only([
+            'atividade_id',
+            'titulo',
+            'data_ingresso',
+            'data_conclusao',
+            'periodo',
+            'horas_declaradas',
+        ]);
 
         if ($request->hasFile('arquivo_path')) {
             Storage::disk('public')->delete($certificado->arquivo_path);
