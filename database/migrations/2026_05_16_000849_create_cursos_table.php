@@ -8,18 +8,17 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('categorias', function (Blueprint $table) {
+        Schema::create('cursos', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('curso_id')
-                ->constrained('cursos')
+            $table->foreignId('instituicao_id')
+                ->constrained('instituicoes')
                 ->cascadeOnDelete();
 
             $table->string('nome');
-
-            $table->unsignedInteger('max_pontos_curso')->nullable();
-            $table->unsignedInteger('max_pontos_semestre')->nullable();
-            $table->boolean('ativo')->default(true);
+            $table->string('campus')->nullable();
+            $table->unsignedInteger('carga_horaria_total_exigida');
+            $table->unsignedInteger('minimo_tipos_atividade_diferentes')->nullable();
 
             $table->timestamps();
         });
@@ -27,6 +26,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('categorias');
+        Schema::dropIfExists('cursos');
     }
 };

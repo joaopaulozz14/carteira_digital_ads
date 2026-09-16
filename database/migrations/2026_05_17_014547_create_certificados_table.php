@@ -6,29 +6,27 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('certificados', function (Blueprint $table) {
-
             $table->id();
 
             $table->foreignId('user_id')
                 ->constrained()
                 ->cascadeOnDelete();
 
-            $table->foreignId('categoria_id')
-                ->constrained('categorias')
+            $table->foreignId('atividade_id')
+                ->constrained('atividades')
                 ->restrictOnDelete();
 
             $table->string('titulo');
 
-            $table->integer('horas_declaradas');
+            $table->date('data_ingresso');
+            $table->date('data_conclusao');
+            $table->string('periodo', 10); // formato: "AAAA.N" — conta o período de conclusão
 
-            $table->integer('horas_validadas')
-                ->nullable();
+            $table->integer('horas_declaradas');
+            $table->integer('horas_validadas')->nullable();
 
             $table->enum('status', [
                 'PENDENTE',
@@ -36,21 +34,15 @@ return new class extends Migration
                 'REJEITADO'
             ])->default('PENDENTE');
 
-            $table->text('justificativa')
-                ->nullable();
-
+            $table->text('justificativa')->nullable();
             $table->string('arquivo_path');
 
-            $table->timestamp('data_envio')
-                ->useCurrent();
+            $table->timestamp('data_envio')->useCurrent();
 
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('certificados');

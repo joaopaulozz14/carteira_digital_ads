@@ -8,7 +8,7 @@ class Certificado extends Model
 {
     protected $fillable = [
         'user_id',
-        'categoria_id',
+        'atividade_id',
         'titulo',
         'data_ingresso',
         'data_conclusao',
@@ -18,12 +18,13 @@ class Certificado extends Model
         'status',
         'justificativa',
         'arquivo_path',
-        'data_envio'
+        'data_envio',
     ];
+
     protected $casts = [
-    'data_ingresso' => 'date',  
-    'data_conclusao' => 'date',
-    'data_envio' => 'datetime',
+        'data_ingresso' => 'date',
+        'data_conclusao' => 'date',
+        'data_envio' => 'datetime',
     ];
 
     public function user()
@@ -31,8 +32,8 @@ class Certificado extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function categoria()
+    public function atividade()
     {
-        return $this->belongsTo(Categoria::class);
+        return $this->belongsTo(Atividade::class);
     }
 }

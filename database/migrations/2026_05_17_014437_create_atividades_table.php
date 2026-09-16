@@ -8,16 +8,17 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('categorias', function (Blueprint $table) {
+        Schema::create('atividades', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('curso_id')
-                ->constrained('cursos')
+            $table->foreignId('categoria_id')
+                ->constrained('categorias')
                 ->cascadeOnDelete();
 
             $table->string('nome');
-
-            $table->unsignedInteger('max_pontos_curso')->nullable();
+            $table->string('unidade_medida'); // hora, atividade, participacao, mes, publicacao...
+            $table->decimal('pontos_por_unidade', 8, 2);
+            $table->text('regra_pontuacao'); // texto livre — cobre taxas condicionais/compostas
             $table->unsignedInteger('max_pontos_semestre')->nullable();
             $table->boolean('ativo')->default(true);
 
@@ -27,6 +28,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('categorias');
+        Schema::dropIfExists('atividades');
     }
 };
