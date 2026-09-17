@@ -102,7 +102,14 @@ export default function Index({ certificados }) {
                         </h1>
 
                         <div className="overflow-x-auto rounded-card border border-[#EEF1F5]">
-                            <table className="w-full min-w-[760px] border-collapse">
+                            <table className="w-full min-w-[760px] table-fixed border-collapse">
+                                <colgroup>
+                                    {isAdmin && <col className="w-[14%]" />}
+                                    <col className={isAdmin ? 'w-[18%]' : 'w-[22%]'} />
+                                    <col className={isAdmin ? 'w-[26%]' : 'w-[32%]'} />
+                                    <col className="w-[14%]" />
+                                    <col />
+                                </colgroup>
                                 <thead>
                                     <tr>
                                         {isAdmin && (
@@ -114,10 +121,7 @@ export default function Index({ certificados }) {
                                             Título
                                         </th>
                                         <th scope="col" className="text-left text-sm font-semibold text-text-table-head bg-bg-input px-6 py-3.5">
-                                            Categoria
-                                        </th>
-                                        <th scope="col" className="text-left text-sm font-semibold text-text-table-head bg-bg-input px-6 py-3.5">
-                                            Data de Envio
+                                            Atividade
                                         </th>
                                         <th scope="col" className="text-left text-sm font-semibold text-text-table-head bg-bg-input px-6 py-3.5">
                                             Status
@@ -138,20 +142,18 @@ export default function Index({ certificados }) {
                                                 className="border-t border-[#EEF1F5] odd:bg-white even:bg-bg-input/40 hover:bg-[#EAF1FF] transition-colors"
                                             >
                                                 {isAdmin && (
-                                                    <td className="px-6 py-4 whitespace-nowrap text-base text-text-heading">
+                                                    <td className="px-6 py-4 text-base text-text-heading truncate" title={certificado.user?.name}>
                                                         {certificado.user?.name || 'Não informado'}
                                                     </td>
                                                 )}
-                                                <td className="px-6 py-4 whitespace-nowrap text-base font-semibold text-text-heading">
+                                                <td className="px-6 py-4 text-base font-semibold text-text-heading truncate" title={certificado.titulo}>
                                                     {certificado.titulo}
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-base text-text-secondary">
-                                                    {certificado.categoria?.nome || '—'}
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-base text-text-secondary">
-                                                    {certificado.data_envio
-                                                        ? new Date(certificado.data_envio).toLocaleDateString('pt-BR')
-                                                        : '—'}
+                                                <td
+                                                    className="px-6 py-4 text-base text-text-secondary truncate"
+                                                    title={certificado.atividade?.nome || ''}
+                                                >
+                                                    {certificado.atividade?.nome || '—'}
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-base">
                                                     <span
@@ -236,8 +238,8 @@ export default function Index({ certificados }) {
                                     {certificados.length === 0 && (
                                         <tr className="border-t border-[#EEF1F5]">
                                             <td
-                                                colSpan={isAdmin ? 6 : 5}
-                                                className="px-6 py-14 text-center"
+                                                colSpan={isAdmin ? 5 : 4}
+                                                className="px-6 py-8 text-center text-base text-text-secondary"
                                             >
                                                 <div className="flex flex-col items-center gap-3">
                                                     <span className="w-14 h-14 rounded-icon bg-bg-input flex items-center justify-center">
