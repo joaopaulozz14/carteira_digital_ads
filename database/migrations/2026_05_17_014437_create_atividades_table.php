@@ -15,7 +15,7 @@ return new class extends Migration
                 ->constrained('categorias')
                 ->cascadeOnDelete();
 
-            $table->string('nome');
+            $table->text('nome'); // changer to 'string' later if needed, but 'text' allows for longer names
             $table->string('unidade_medida'); // hora, atividade, participacao, mes, publicacao...
             $table->decimal('pontos_por_unidade', 8, 2);
             $table->text('regra_pontuacao'); // texto livre — cobre taxas condicionais/compostas
