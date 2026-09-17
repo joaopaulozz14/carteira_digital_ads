@@ -2,31 +2,27 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
+use App\Models\Atividade;
 use App\Models\Certificado;
 use App\Models\User;
-use App\Models\Categoria;
+use Illuminate\Database\Seeder;
 
 class CertificadoSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $aluno1 = User::where('email', 'aluno1@cdc.com')->first();
         $aluno2 = User::where('email', 'aluno2@cdc.com')->first();
 
-        $categoriaCurso = Categoria::where('nome', 'Curso')->first();
-        $categoriaEvento = Categoria::where('nome', 'Evento')->first();
-        $categoriaMonitoria = Categoria::where('nome', 'Monitoria')->first();
-        $categoriaExtensao = Categoria::where('nome', 'Extensão')->first();
-        $categoriaMinicurso = Categoria::where('nome', 'Minicurso')->first();
+        $atividadeCursoInformatica = Atividade::where('nome', 'like', 'Realização de cursos de língua estrangeira%')->firstOrFail();
+        $atividadeOuvinteEvento = Atividade::where('nome', 'like', 'Participação como ouvinte em congressos%')->firstOrFail();
+        $atividadeMonitoria = Atividade::where('nome', 'like', 'Monitoria remunerada%')->firstOrFail();
+        $atividadeExtensao = Atividade::where('nome', 'like', 'Participação em projetos e grupos de extensão%')->firstOrFail();
 
         $certificados = [
             [
                 'user_id' => $aluno1->id,
-                'categoria_id' => $categoriaCurso->id,
+                'atividade_id' => $atividadeCursoInformatica->id,
                 'titulo' => 'Curso de Lógica de Programação',
                 'data_ingresso' => '2025-02-10',
                 'data_conclusao' => '2025-04-15',
@@ -40,7 +36,7 @@ class CertificadoSeeder extends Seeder
             ],
             [
                 'user_id' => $aluno1->id,
-                'categoria_id' => $categoriaEvento->id,
+                'atividade_id' => $atividadeOuvinteEvento->id,
                 'titulo' => 'Semana Acadêmica de Tecnologia',
                 'data_ingresso' => '2025-06-02',
                 'data_conclusao' => '2025-06-06',
@@ -54,7 +50,7 @@ class CertificadoSeeder extends Seeder
             ],
             [
                 'user_id' => $aluno1->id,
-                'categoria_id' => $categoriaMonitoria->id,
+                'atividade_id' => $atividadeMonitoria->id,
                 'titulo' => 'Monitoria de Banco de Dados',
                 'data_ingresso' => '2025-03-01',
                 'data_conclusao' => '2025-07-01',
@@ -68,7 +64,7 @@ class CertificadoSeeder extends Seeder
             ],
             [
                 'user_id' => $aluno2->id,
-                'categoria_id' => $categoriaExtensao->id,
+                'atividade_id' => $atividadeExtensao->id,
                 'titulo' => 'Projeto de Extensão Comunitária',
                 'data_ingresso' => '2025-05-01',
                 'data_conclusao' => '2025-08-01',
@@ -82,7 +78,7 @@ class CertificadoSeeder extends Seeder
             ],
             [
                 'user_id' => $aluno2->id,
-                'categoria_id' => $categoriaMinicurso->id,
+                'atividade_id' => $atividadeCursoInformatica->id,
                 'titulo' => 'Minicurso de Git e GitHub',
                 'data_ingresso' => '2025-09-01',
                 'data_conclusao' => '2025-09-03',

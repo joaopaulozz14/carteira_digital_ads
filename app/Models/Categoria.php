@@ -7,16 +7,24 @@ use Illuminate\Database\Eloquent\Model;
 class Categoria extends Model
 {
     protected $fillable = [
-        'nome'
+        'curso_id',
+        'nome',
+        'max_pontos_curso',
+        'max_pontos_semestre',
+        'ativo',
     ];
 
-    public function certificados()
+    protected $casts = [
+        'ativo' => 'boolean',
+    ];
+
+    public function curso()
     {
-        return $this->hasMany(Certificado::class);
+        return $this->belongsTo(Curso::class);
     }
 
-    public function regras()
+    public function atividades()
     {
-        return $this->hasMany(Regra::class);
+        return $this->hasMany(Atividade::class);
     }
 }

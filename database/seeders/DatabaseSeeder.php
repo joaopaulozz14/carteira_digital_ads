@@ -20,8 +20,9 @@ class DatabaseSeeder extends Seeder
         $this->call(
             [
                 InstituicaoSeeder::class,
+                CursoSeeder::class,
                 UserSeeder::class,
-                CategoriaSeeder::class,
+                CategoriaAtividadeIfmsSeeder::class,
                 CertificadoSeeder::class,
             ]
         );

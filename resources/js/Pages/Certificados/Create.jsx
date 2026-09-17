@@ -1,10 +1,115 @@
-import React from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, useForm } from '@inertiajs/react';
 
-export default function Create({ categorias }) {
+
+function AtividadeSelect({ grupos, value, onChange, placeholder = 'Selecione uma atividade' }) {
+    const [isOpen, setIsOpen] = useState(false);
+    const containerRef = useRef(null);
+
+    // Encontra o nome da atividade selecionada (para exibir no botão)
+    const atividadeSelecionada = useMemo(() => {
+        for (const [, itens] of grupos) {
+            const encontrada = itens.find((item) => String(item.id) === String(value));
+            if (encontrada) return encontrada;
+        }
+        return null;
+    }, [grupos, value]);
+
+    // Fecha o dropdown ao clicar fora dele
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (containerRef.current && !containerRef.current.contains(event.target)) {
+                setIsOpen(false);
+            }
+        }
+
+        function handleEscape(event) {
+            if (event.key === 'Escape') setIsOpen(false);
+        }
+
+        document.addEventListener('mousedown', handleClickOutside);
+        document.addEventListener('keydown', handleEscape);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('keydown', handleEscape);
+        };
+    }, []);
+
+    const handleSelect = (id) => {
+        onChange(String(id));
+        setIsOpen(false);
+    };
+
+    return (
+        <div className="relative" ref={containerRef}>
+            <button
+                type="button"
+                onClick={() => setIsOpen((prev) => !prev)}
+                aria-haspopup="listbox"
+                aria-expanded={isOpen}
+                className="ds-select w-full min-h-touch px-4 py-3 bg-bg-input border border-transparent rounded-input text-base text-left text-text-heading focus:border-action-blue focus:outline-none flex items-center justify-between gap-2"
+            >
+                <span className={atividadeSelecionada ? 'text-text-heading' : 'text-text-secondary'}>
+                    {atividadeSelecionada ? atividadeSelecionada.nome : placeholder}
+                </span>
+                <svg
+                    className={`w-4 h-4 shrink-0 text-text-secondary transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+            </button>
+
+            {isOpen && (
+                <div
+                    role="listbox"
+                    className="absolute left-0 right-0 top-full mt-2 z-20 max-h-72 overflow-y-auto rounded-input border border-[#E1E5EB] bg-white shadow-float py-2"
+                >
+                    <button
+                        type="button"
+                        role="option"
+                        aria-selected={value === ''}
+                        onClick={() => handleSelect('')}
+                        className="w-full text-left px-4 py-2.5 text-sm text-text-secondary hover:bg-bg-input transition-colors"
+                    >
+                        {placeholder}
+                    </button>
+
+                    {grupos.map(([nomeCategoria, itens]) => (
+                        <div key={nomeCategoria}>
+                            <div className="sticky top-0 bg-white px-4 pt-2 pb-1 text-xs font-semibold uppercase tracking-wide text-text-secondary">
+                                {nomeCategoria}
+                            </div>
+                            {itens.map((atividade) => (
+                                <button
+                                    key={atividade.id}
+                                    type="button"
+                                    role="option"
+                                    aria-selected={String(value) === String(atividade.id)}
+                                    onClick={() => handleSelect(atividade.id)}
+                                    className={`w-full text-left px-4 py-2.5 text-sm transition-colors hover:bg-bg-input ${
+                                        String(value) === String(atividade.id)
+                                            ? 'bg-[#EAF1FF] text-action-blue font-medium'
+                                            : 'text-text-heading'
+                                    }`}
+                                >
+                                    {atividade.nome}
+                                </button>
+                            ))}
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+}
+
+export default function Create({ atividades }) {
     const { data, setData, post, processing, errors, reset } = useForm({
-        categoria_id: '',
+        atividade_id: '',
         titulo: '',
         data_ingresso: '',
         data_conclusao: '',
@@ -21,9 +126,26 @@ export default function Create({ categorias }) {
         });
     };
 
-    const categoriaSelecionada = categorias.find(
-        (c) => String(c.id) === String(data.categoria_id)
+    // Agrupa as atividades por categoria, na ordem em que chegam do backend
+    const atividadesPorCategoria = useMemo(() => {
+        const grupos = new Map();
+
+        for (const atividade of atividades) {
+            const nomeCategoria = atividade.categoria?.nome ?? 'Outras';
+            if (!grupos.has(nomeCategoria)) {
+                grupos.set(nomeCategoria, []);
+            }
+            grupos.get(nomeCategoria).push(atividade);
+        }
+
+        return Array.from(grupos.entries());
+    }, [atividades]);
+
+    const atividadeSelecionada = atividades.find(
+        (atividade) => String(atividade.id) === String(data.atividade_id)
     );
+
+    const categoriaSelecionada = atividadeSelecionada?.categoria ?? null;
 
     return (
         <AuthenticatedLayout
@@ -47,40 +169,33 @@ export default function Create({ categorias }) {
                             {/* Coluna principal */}
                             <div className="flex-1 space-y-4">
 
-                                {/* Passo 1 — Categoria */}
+                                {/* Passo 1 — Atividade */}
                                 <div className="bg-white rounded-card shadow-card p-6">
                                     <h3 className="text-base font-semibold text-text-heading mb-4">
-                                        Passo 1 — Selecione a categoria do certificado
+                                        Passo 1 — Selecione a atividade do certificado
                                     </h3>
-                                    <fieldset className="border-0 p-0 m-0">
-                                        <legend className="sr-only">Categoria do certificado</legend>
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                            {categorias.map((categoria) => (
-                                                <div className="relative" key={categoria.id}>
-                                                    <input
-                                                        type="radio"
-                                                        name="categoria"
-                                                        id={`cat-${categoria.id}`}
-                                                        value={categoria.id}
-                                                        checked={String(data.categoria_id) === String(categoria.id)}
-                                                        onChange={(e) => setData('categoria_id', e.target.value)}
-                                                        className="peer sr-only"
-                                                    />
-                                                    <label
-                                                        htmlFor={`cat-${categoria.id}`}
-                                                        className="block min-h-touch cursor-pointer rounded-input border border-[#E1E5EB] bg-bg-input px-4 py-3 peer-checked:border-action-blue peer-checked:bg-[#EAF1FF] peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-action-blue peer-focus-visible:outline-offset-2 transition-colors"
-                                                    >
-                                                        <strong className="block text-sm text-text-heading">
-                                                            {categoria.nome}
-                                                        </strong>
-                                                    </label>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </fieldset>
-                                    {errors.categoria_id && (
-                                        <p className="text-status-red-text text-sm mt-3">{errors.categoria_id}</p>
-                                    )}
+
+                                    <div>
+                                        <label className="block text-base font-medium text-text-heading mb-2">
+                                            Atividade
+                                        </label>
+                                        <AtividadeSelect
+                                            grupos={atividadesPorCategoria}
+                                            value={data.atividade_id}
+                                            onChange={(id) => setData('atividade_id', id)}
+                                        />
+                                        {errors.atividade_id && (
+                                            <p className="text-status-red-text text-sm mt-1.5">{errors.atividade_id}</p>
+                                        )}
+
+                                        {/* Regra de pontuação da atividade escolhida */}
+                                        {atividadeSelecionada && (
+                                            <div className="mt-3 rounded-input bg-bg-input px-4 py-3 text-sm text-text-secondary">
+                                                <strong className="text-text-heading">Regra de pontuação:</strong>{' '}
+                                                {atividadeSelecionada.regra_pontuacao}
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
 
                                 {/* Passo 2 — Informações do certificado */}

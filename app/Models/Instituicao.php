@@ -13,13 +13,13 @@ class Instituicao extends Model
         'sigla'
     ];
 
+    public function cursos()
+    {
+        return $this->hasMany(Curso::class);
+    }
+
     public function users()
     {
         return $this->hasMany(User::class);
-    }
-
-    public function regras()
-    {
-        return $this->hasMany(Regra::class);
     }
 }
